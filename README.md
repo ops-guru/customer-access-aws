@@ -8,6 +8,8 @@ For more granular control over resources and permissions, explore the example fi
 
 Feel free to review and choose the template that best aligns with your security and access management strategy. If additional customization is needed, refer to the inline policy examples for inspiration on crafting policies tailored to your specific use case.
 
+If you're unsure about which template precisely aligns with your project requirements, we recommend using the `ReadOnlyAccess.json` template. This template grants read-only access to all your services and resources, catering to the needs of Opsguru team members.
+
 ## Required Information for JSON File Customization
 
 To effectively use the provided JSON files, ensure to replace the following parameters with accurate information for seamless integration with your AWS account:
