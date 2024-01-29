@@ -26,7 +26,7 @@ If you require diverse access levels for various groups within the Opsguru team 
 
 ## How to Utilize Templates for Access Provisioning
 
-To employ the provided templates, follow these steps after updating the RoleName and Principal parameters:
+To employ the provided templates, follow these steps after updating the `RoleName` and `Principal` parameters:
 
 1. Navigate to the CloudFormation page in your AWS Console.
 2. Click on the `Create stack` button.
