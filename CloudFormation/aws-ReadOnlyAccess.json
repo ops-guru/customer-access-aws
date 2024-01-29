@@ -18,11 +18,7 @@
             ]
           },
           "ManagedPolicyArns": [
-            "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess",
-            "arn:aws:iam::aws:policy/AmazonRDSReadOnlyAccess",
-            "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess",
-            "arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess",
-            "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
+            "arn:aws:iam::aws:policy/ReadOnlyAccess"
           ]
         }
       }
