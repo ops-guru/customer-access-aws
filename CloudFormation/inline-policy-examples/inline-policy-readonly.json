@@ -1,0 +1,53 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+      "CrossAccountRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "RoleName": "GET_THE_VALUE_FOR_THIS_PARAMETER_FROM_OPSGURU_TEAM",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "AWS": "GET_THE_VALUE_FOR_THIS_PARAMETER_FROM_OPSGURU_TEAM"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Policies": [
+            {
+              "PolicyName": "ReadOnly",
+              "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Action": [
+                      "rds:Describe*",
+                      "rds:ListTagsForResource",
+                      "ec2:Describe*",
+                      "s3:Get*",
+                      "s3:List*",
+                      "s3:Describe*",
+                      "s3-object-lambda:Get*",
+                      "s3-object-lambda:List*",
+                      "logs:Get*",
+                      "logs:List*",
+                      "billingconductor:List*",
+                      "organizations:ListAccounts",
+                      "pricing:DescribeServices"
+                  ],
+                    "Resource": "*"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+  
