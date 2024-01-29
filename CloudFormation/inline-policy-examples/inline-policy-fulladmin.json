@@ -4,14 +4,14 @@
       "CrossAccountRole": {
         "Type": "AWS::IAM::Role",
         "Properties": {
-          "RoleName": "OpsGuruAdminRole-Prod",
+          "RoleName": "GET_THE_VALUE_FOR_THIS_PARAMETER_FROM_OPSGURU_TEAM",
           "AssumeRolePolicyDocument": {
             "Version": "2012-10-17",
             "Statement": [
               {
                 "Effect": "Allow",
                 "Principal": {
-                  "AWS": "arn:aws:iam::730335497822:role/aws-reserved/sso.amazonaws.com/us-east-2/AWSReservedSSO_Customer1TF_69214d73e96570ce"
+                  "AWS": "GET_THE_VALUE_FOR_THIS_PARAMETER_FROM_OPSGURU_TEAM"
                 },
                 "Action": "sts:AssumeRole"
               }
