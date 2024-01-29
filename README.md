@@ -2,7 +2,7 @@
 
 This repository contains JSON files with example CloudFormation templates designed to grant access to Opsguru employees in your AWS account. Each template offers varying levels of access, allowing you to tailor permissions to your specific needs.
 
-As an illustration, consider the `aws-AdministratorAccess.json` file. This template leverages the `AdministratorAccess` AWS Managed Policy, providing comprehensive administrative privileges across all resources in your AWS account. In contrast, the `aws-BillingReadOnlyAccess.json` file is designed to provide read-only access exclusively to billing information within your AWS account. Moreover, the `aws-ReadOnlyAccess.json` file provides the read-only accesss to all resources in your AWS account. 
+As an illustration, consider the `AdministratorAccess.json` file. This template leverages the `AdministratorAccess` AWS Managed Policy, providing comprehensive administrative privileges across all resources in your AWS account. In contrast, the `BillingReadOnlyAccess.json` file is designed to provide read-only access exclusively to billing information within your AWS account. Moreover, the `ReadOnlyAccess.json` file provides the read-only accesss to all resources in your AWS account. 
 
 For more granular control over resources and permissions, explore the example files within the `inline-policy-examples` folder. These templates demonstrate the use of inline policies, allowing you to finely tune access according to your requirements.
 
