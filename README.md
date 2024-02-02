@@ -13,11 +13,11 @@ For more granular control over resources and permissions, explore the example fi
 
 Feel free to review and choose the template that best aligns with your security and access management strategy. If additional customization is needed, refer to the inline policy examples for inspiration on crafting policies tailored to your specific use case.
 
-If you're unsure about which template precisely aligns with your project requirements, we recommend using the `ReadOnlyAccess.json` template. This template grants read-only access to all your services and resources, catering to the needs of OpsGuru team members.
+If you're unsure about which template precisely aligns with your project requirements, we recommend using the `CrossAccountRoleWithManagedPolicy.yaml` template with the `ReadOnlyAccess` managed policy. This template grants read-only access to all your services and resources, catering to the needs of OpsGuru team members.
 
 ## Required Information for CloudFormation Template Customization
 
-To effectively use the provided CloudFormation templates, specify the following parameters with accurate information for seamless integration with your AWS account:
+To effectively use the provided `CrossAccountRoleWithManagedPolicy.yaml` CloudFormation template, specify the following parameters with accurate information for seamless integration with your AWS account:
 
 Parameter  | Description
 ---------  | -----------
@@ -25,12 +25,11 @@ RoleName   | Name of the IAM role to create in your AWS account
 Principal  | Amazon Resource Name (ARN) of the principal that can assume the IAM role
 ManagedPolicyArn | AWS managed policy to attach to the IAM role
 
-
 Kindly request the OpsGuru team to furnish you with the specific values for the parameters mentioned above.
 
 ## Configuring Multiple Access Levels 
 
-If you require diverse access levels for various groups within the OpsGuru team in your AWS account, utilize distinct templates to assign permissions to different roles. Collaborate with the OpsGuru team to establish multiple roles as needed.
+If you require diverse access levels for various groups within the OpsGuru team in your AWS account, create distinct CloudFormation stacks to assign permissions to different roles. Collaborate with the OpsGuru team to establish multiple roles as needed.
 
 ## How to Utilize Templates for Access Provisioning
 
@@ -48,4 +47,4 @@ To employ the provided templates, follow these steps:
 
 ## Access Revocation
 
-To revoke OpsGuru team access to your AWS account, simply delete the CloudFormation stack created in the previous step. By removing this stack, all associated resources (i.e. IAM Role) providing access to your AWS account will be seamlessly removed.
+To revoke OpsGuru team access to your AWS account, simply delete the CloudFormation stack created in the previous step. By removing this stack, all associated resources (i.e., IAM role) providing access to your AWS account will be seamlessly removed.
