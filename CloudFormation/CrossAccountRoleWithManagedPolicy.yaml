@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  IAM role for cross-account access by OpsGuru.
+
+
+Parameters:
+
+  RoleName:
+    Type: String
+    Description: >
+      Name of the IAM role to create in your AWS account
+
+  Principal:
+    Type: String
+    Description: >
+      Amazon Resource Name (ARN) of the principal that can assume the IAM role created in your AWS account
+
+  ManagedPolicyArn:
+    Type: String
+    Default: arn:aws:iam::aws:policy/ReadOnlyAccess
+    AllowedValues:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+      - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
+      - arn:aws:iam::aws:policy/ReadOnlyAccess
+    Description: >
+      AWS managed policy to attach to the role (Default: ReadOnlyAccess).
+
+
+Metadata: 
+
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - Label: 
+          default: "Role Name and Permissions"
+        Parameters: 
+          - RoleName
+          - ManagedPolicyArn
+      - Label: 
+          default: "OpsGuru Provided Parameter Values"
+        Parameters: 
+          - Principal
+
+
+Resources:
+
+  CrossAccountRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName:
+        Ref: RoleName
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            AWS:
+              Ref: Principal
+          Action: sts:AssumeRole
+      ManagedPolicyArns:
+      - Ref: ManagedPolicyArn
+
+
+Outputs:
+
+  CrossAccountRoleArn:
+    Description: Amazon Resource Name (ARN) of the IAM role
+    Value:
+      Fn::GetAtt: CrossAccountRole.Arn
