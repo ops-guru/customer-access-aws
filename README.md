@@ -7,7 +7,7 @@ The `CrossAccountRoleWithManagedPolicy.yaml` template leverages a specified AWS 
 - `AdministratorAccess`: Provides comprehensive administrative privileges across all resources in your AWS account
 - `AmazonEC2ReadOnlyAccess`: Provides read only access to Amazon EC2
 - `AWSBillingReadOnlyAccess`: Provides read-only access exclusively to billing information within your AWS account
-- `ReadOnlyAccess`: Provides read-only accesss to all resources in your AWS account
+- `ReadOnlyAccess`: Provides read-only access to all resources in your AWS account
 
 For more granular control over resources and permissions, explore the example files within the `inline-policy-examples` folder. These templates demonstrate the use of inline policies, allowing you to finely tune access according to your requirements.
 
@@ -27,7 +27,7 @@ ManagedPolicyArn | AWS managed policy to attach to the IAM role
 
 Kindly request the OpsGuru team to furnish you with the specific values for the parameters mentioned above.
 
-## Configuring Multiple Access Levels 
+## Configuring Multiple Access Levels
 
 If you require diverse access levels for various groups within the OpsGuru team in your AWS account, create distinct CloudFormation stacks to assign permissions to different roles. Collaborate with the OpsGuru team to establish multiple roles as needed.
 
@@ -35,7 +35,7 @@ If you require diverse access levels for various groups within the OpsGuru team 
 
 To employ the provided templates, follow these steps:
 
-1. Navigate to the CloudFormation page in your AWS Managemenet Console.
+1. Navigate to the CloudFormation page in your AWS Management Console.
 2. Click on the `Create stack` > `With new resources (standard)` button.
 3. In the subsequent steps, under `Specify template`, opt for the `Upload a template file` radio button, click `Choose file` and select the corresponding template file from this repository. The template will be automatically uploaded to an AWS-managed S3 bucket in your account for CloudFormation templates.
 4. Click `Next` and provide a name for your stack (e.g., `OpsGuru-readonly-billing`).
