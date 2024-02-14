@@ -44,67 +44,57 @@ To employ the provided templates, follow these steps:
 7. In the last step, acknowledge that `AWS CloudFormation might create IAM resources with custom names` by checking the corresponding box.
 8. Click `Submit`. The stack will be generated and commence execution. Upon successful completion, you should see the status `CREATE_COMPLETE` for this stack.
 
-
 ## Access Revocation
 
 To revoke OpsGuru team access to your AWS account, simply delete the CloudFormation stack created in the previous step. By removing this stack, all associated resources (i.e., IAM role) providing access to your AWS account will be seamlessly removed.
 
+## CloudTrail: Logging of AWS Activity
 
-## CloudTrail - Logging of AWS users activity
+Actions performed by the provisioned IAM roles are logged by AWS CloudTrail. CloudTrail Event history makes all management events available for 90 days by default. If you want to store more than 90 days of history, or also record data or Insights event types, create a CloudTrail trail by following the directions in the [Creating a trail](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-create-a-trail-using-the-console-first-time.html) section of the AWS CloudTrail User Guide.
 
-1. Go to the CloudTrail console.
-- Click on "Trails" in the sidebar.
-- Click on "Create trail".
-- Enter a name for your trail.
-- Choose "Apply trail to all regions" if you want to log activities across all regions.
-- Choose "Log all S3 data events" if you want to log S3 data events.
-- Choose "Create a new S3 bucket" or select an existing one to store your logs.
-- Under "Management events", select "Read/Write events" to log management events like IAM changes.
-- Enable CloudTrail Insights (Optional):
+### CloudTrail Data and Insight Events
 
-CloudTrail Insights can help you identify unusual activity in your AWS account by analyzing CloudTrail logs.
-You can enable it from the CloudTrail console by selecting the trail and then clicking on "Insights" in the navigation pane.
+CloudTrail trails records all read and write management events by default. If you also wish to log data or Insights event types, refer to the following sections of the AWS CloudTrail User Guide:
 
-### Filter CloudTrail events by IAM Role
+1. [Logging data events](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)
+2. [Logging Insights events](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-insights-events-with-cloudtrail.html)
 
-Once your trail is created, you can set up event selectors to filter the events you want to log.
-- Click on your trail in the CloudTrail console.
-- Under "Data events", click "Add data event".
-- Choose the services and operations you want to log (e.g., S3 operations).
-- Under "Specific resource ARN", enter the ARN of the IAM Role you want to filter by.
-- Click "Save".
-- Review and Analyze Logs:
+### Review and Analyze Logs
 
-CloudTrail logs can be accessed via the S3 bucket you specified.
-You can also use CloudWatch Logs to monitor and set up alarms for specific events.
-Use CloudTrail Insights to analyze logs for unusual activity and potential security threats.
+There are multiple ways to analyze the log data made available through CloudTrail. The simplest, and available by default, is to search for events through the CloudTrail Event history. See [Working with CloudTrail Event history](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events.html) for details on this method.
 
-By following these steps, you can create and use AWS CloudTrail to log all activities performed by arbitrary users and filter them by a specific IAM Role. This helps you maintain visibility and control over actions taken in your AWS account.
+Once you've created a trail that saves to an S3 bucket, you can create a table in Amazon Athena and use robust SQL queries against the events saved to the trail. See [Querying AWS CloudTrail logs](https://docs.aws.amazon.com/athena/latest/ug/cloudtrail-logs.html) for more details.
 
+If you also configured a trail to save to CloudWatch Logs, you can view, filter, create metrics and alert on CloudTrail events using CloudWatch. See [Monitoring CloudTrail Log Files with Amazon CloudWatch Logs](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/monitor-cloudtrail-log-files-with-cloudwatch-logs.html) for details.
 
-#### Use Case: Finding EC2 Service Changes
+Finally, the most advanced option for querying CloudTrail log data is using SQL queries against a CloudTrail Lake. See [Working with AWS CloudTrail Lake](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake.html) for more details.
 
-**CloudTrail Query:**
+By using one of the methods above, you can search CloudTrail logs for activities performed against specific services or by a specific IAM role. This helps you maintain visibility and control over actions taken in your AWS account.
+
+#### SQL Query Examples
+
+These examples demonstrate how you use SQL queries via Athena or CloudTrail Lake to search for specific types of CloudTrail events or activities within your AWS environment, providing insights into changes and actions performed by users or services.
+
+_Note: The following queries assume your Athena table or CloudTrail Lake event data store ID is `cloudtrail_logs`._
+
+**Use Case: Finding EC2 service actions:**
+
 ```sql
 SELECT *
 FROM cloudtrail_logs
 WHERE eventSource = 'ec2.amazonaws.com'
 ```
 
-**Explanation**: This query searches through CloudTrail logs to find all events related to the EC2 service. The eventSource field in CloudTrail logs indicates the AWS service that generated the event. By filtering events where eventSource is equal to 'ec2.amazonaws.com', you can identify all activities related to EC2 service changes.
+This query searches through CloudTrail logs to find all events related to the EC2 service. The `eventSource` field in CloudTrail logs indicates the AWS service that generated the event. By filtering events where `eventSource` is equal to `ec2.amazonaws.com`, you can identify all activities related to the EC2 service.
 
-#### Use Case: Finding Read/Write Events of a Specific IAM Role
-
-**CloudTrail Query:**
-
+**Use Case: Finding S3 object read events performed by a specific IAM role:**
 
 ```sql
 SELECT *
 FROM cloudtrail_logs
 WHERE eventSource = 's3.amazonaws.com'
 AND eventName LIKE 'GetObject%'
-AND userIdentity.arn = 'arn:aws:iam::<edit-account-id>:role/your-iam-role'
+AND userIdentity.arn = 'arn:aws:iam::<AWS account ID>:role/<IAM role name>'
 ```
-**Explanation**: This query looks for all CloudTrail events related to Read (GetObject) and Write (PutObject, DeleteObject, etc.) events on an S3 bucket by a specific IAM Role. It filters events where eventSource is 's3.amazonaws.com' and eventName starts with 'GetObject' (for Read events). Additionally, it specifies the IAM Role's ARN in the userIdentity.arn field to identify events performed by that IAM Role.
 
-These examples demonstrate how you can use CloudTrail queries to search for specific types of events or activities within your AWS environment, providing insights into changes and actions performed by users or services.
+This query looks for all CloudTrail S3 object read events (`GetObject*`) performed by a specific IAM role. It filters events where `eventSource` is `s3.amazonaws.com` and `eventName` starts with `GetObject`. Additionally, it specifies the IAM role's ARN in the `userIdentity.arn` field to identify events performed by that IAM role.
