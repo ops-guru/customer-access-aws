@@ -1,4 +1,4 @@
-# Repository Overview: AWS Access Templates
+# OpsGuru Customer Access: AWS
 
 This repository contains example CloudFormation templates designed to grant access to OpsGuru employees in your AWS account. Each template offers varying levels of access, allowing you to tailor permissions to your specific needs.
 
