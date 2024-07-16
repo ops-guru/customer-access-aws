@@ -1,8 +1,8 @@
-# Repository Overview: AWS Access Templates
+# OpsGuru Customer Access: AWS
 
-This repository contains example CloudFormation templates designed to grant access to OpsGuru employees in your AWS account. Each template offers varying levels of access, allowing you to tailor permissions to your specific needs.
+This repository contains a CloudFormation template designed to grant access to OpsGuru employees in your AWS account. The template offers varying levels of access, allowing you to tailor permissions to your specific needs via the parameter values you provide.
 
-The `CrossAccountRoleWithManagedPolicy.yaml` template leverages a specified AWS managed policy to provide permissions in your AWS account. You may chose from one of the following AWS managed policies:
+The `CrossAccountRoleWithManagedPolicy.yaml` template leverages a specified [AWS managed policy for job function](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html) to provide permissions in your AWS account. You may chose from one of the following AWS managed policies:
 
 - `AdministratorAccess`: Provides comprehensive administrative privileges across all resources in your AWS account
 - `AmazonEC2ReadOnlyAccess`: Provides read only access to Amazon EC2
@@ -11,9 +11,9 @@ The `CrossAccountRoleWithManagedPolicy.yaml` template leverages a specified AWS 
 
 For more granular control over resources and permissions, explore the example files within the `inline-policy-examples` folder. These templates demonstrate the use of inline policies, allowing you to finely tune access according to your requirements.
 
-Feel free to review and choose the template that best aligns with your security and access management strategy. If additional customization is needed, refer to the inline policy examples for inspiration on crafting policies tailored to your specific use case.
+Feel free to review and choose the AWS managed policy that best aligns with your security and access management strategy. If additional customization is needed, refer to the inline policy examples for inspiration on crafting policies tailored to your specific use case.
 
-If you're unsure about which template precisely aligns with your project requirements, we recommend using the `CrossAccountRoleWithManagedPolicy.yaml` template with the `ReadOnlyAccess` managed policy. This template grants read-only access to all your services and resources, catering to the needs of OpsGuru team members.
+If you're unsure about which policy aligns with your project requirements, we recommend using the `CrossAccountRoleWithManagedPolicy.yaml` template with the `ReadOnlyAccess` managed policy. This template grants read-only access to all your services and resources, catering to the needs of OpsGuru team members.
 
 ## Required Information for CloudFormation Template Customization
 
