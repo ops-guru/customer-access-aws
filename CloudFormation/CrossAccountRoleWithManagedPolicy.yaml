@@ -23,6 +23,7 @@ Parameters:
       - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
       - arn:aws:iam::aws:policy/ReadOnlyAccess
+      - Security-Audit-with-Prowler
     Description: >
       AWS managed policy to attach to the role (Default: ReadOnlyAccess).
 
@@ -34,12 +35,12 @@ Metadata:
       - Label: 
           default: "Role Name and Permissions"
         Parameters: 
-          - RoleName
           - ManagedPolicyArn
       - Label: 
           default: "OpsGuru Provided Parameter Values"
         Parameters: 
           - Principal
+          - RoleName
 
 
 Resources:
@@ -58,8 +59,18 @@ Resources:
               Ref: Principal
           Action: sts:AssumeRole
       ManagedPolicyArns:
-      - Ref: ManagedPolicyArn
+        # If "Security-Audit-with-Prowler" is selected, attach both SecurityAudit and ViewOnlyAccess policies
+        Fn::If:
+          - UseProwlerPolicies
+          - 
+            - arn:aws:iam::aws:policy/SecurityAudit
+            - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
+          - 
+            - Ref: ManagedPolicyArn
 
+Conditions:
+  UseProwlerPolicies: 
+    Fn::Equals: [Ref: ManagedPolicyArn, "Security-Audit-with-Prowler"]
 
 Outputs:
 
