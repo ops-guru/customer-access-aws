@@ -8,6 +8,7 @@ The `CrossAccountRoleWithManagedPolicy.yaml` template leverages a specified [AWS
 - `AmazonEC2ReadOnlyAccess`: Provides read only access to Amazon EC2
 - `AWSBillingReadOnlyAccess`: Provides read-only access exclusively to billing information within your AWS account
 - `ReadOnlyAccess`: Provides read-only access to all resources in your AWS account
+- `Security-Audit-with-Prowler`: Provides two AWS managed policies, `SecurityAudit` and `job-function/ViewOnlyAccess`, to enable Prowler to run security audits on your AWS account.
 
 For more granular control over resources and permissions, explore the example files within the `inline-policy-examples` folder. These templates demonstrate the use of inline policies, allowing you to finely tune access according to your requirements.
 
