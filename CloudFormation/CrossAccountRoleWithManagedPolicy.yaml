@@ -25,7 +25,16 @@ Parameters:
       - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
       - arn:aws:iam::aws:policy/ReadOnlyAccess
     Description: >
-      AWS managed policy to attach to the role (Default: ReadOnlyAccess).
+      If selected, a role will be created with the specified AWS managed policy attached.
+
+  PredefinedRole:
+    Type: String
+    Default: ""
+    AllowedValues:
+      - ""
+      - ProwlerScanRole
+    Description: >
+      If selected, the specified predefined role will be created.
 
 
 Metadata: 
@@ -33,14 +42,29 @@ Metadata:
   AWS::CloudFormation::Interface: 
     ParameterGroups: 
       - Label: 
-          default: "Role Name and Permissions"
+          default: Role Permissions (Choose One)
         Parameters: 
           - ManagedPolicyArn
+          - PredefinedRole
       - Label: 
-          default: "OpsGuru Provided Parameter Values"
+          default: OpsGuru Provided Parameter Values
         Parameters: 
           - Principal
           - RoleName
+    ParameterLabels: 
+      ManagedPolicyArn: 
+        default: Managed Policy ARN (Optional)
+      PredefinedRole:
+        default: Predefined Role (Optional)
+      RoleName:
+        default: Role Name
+
+
+Conditions:
+  ProwlerScanRole: 
+    Fn::Equals:
+      - Ref: PredefinedRole
+      - ProwlerScanRole
 
 
 Resources:
