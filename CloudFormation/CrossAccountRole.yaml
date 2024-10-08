@@ -1,0 +1,158 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  IAM role for cross-account access by OpsGuru.
+
+
+Parameters:
+
+  RoleName:
+    Type: String
+    Description: >
+      Name of the IAM role to create in your AWS account.
+
+  Principal:
+    Type: String
+    Description: >
+      Amazon Resource Name (ARN) of the principal that can assume the IAM role created in your AWS account.
+
+  ManagedPolicyArn:
+    Type: String
+    Default: ""
+    AllowedValues:
+      - ""
+      - arn:aws:iam::aws:policy/AdministratorAccess
+      - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
+      - arn:aws:iam::aws:policy/ReadOnlyAccess
+    Description: >
+      If selected, a role will be created with the specified AWS managed policy attached.
+
+  PredefinedRole:
+    Type: String
+    Default: ""
+    AllowedValues:
+      - ""
+      - ProwlerScanRole
+    Description: >
+      If selected, the specified predefined role will be created.
+
+
+Metadata:
+
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Role Permissions (Choose One)
+        Parameters:
+          - ManagedPolicyArn
+          - PredefinedRole
+      - Label:
+          default: OpsGuru Provided Parameter Values
+        Parameters:
+          - Principal
+          - RoleName
+    ParameterLabels:
+      ManagedPolicyArn:
+        default: Managed Policy ARN (Optional)
+      PredefinedRole:
+        default: Predefined Role (Optional)
+      RoleName:
+        default: Role Name
+
+
+Conditions:
+
+  ProwlerScanRole:
+    Fn::Equals:
+      - Ref: PredefinedRole
+      - ProwlerScanRole
+
+
+Resources:
+
+  CrossAccountRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName:
+        Ref: RoleName
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            AWS:
+              Ref: Principal
+          Action: sts:AssumeRole
+      ManagedPolicyArns:
+        Fn::If:
+          - ProwlerScanRole
+          -
+            - arn:aws:iam::aws:policy/SecurityAudit
+            - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
+          -
+            - Ref: ManagedPolicyArn
+      Policies:
+        Fn::If:
+          - ProwlerScanRole
+          -
+            - PolicyName: ProwlerScanRoleAdditionalViewPrivileges
+              PolicyDocument:
+                Version : '2012-10-17'
+                Statement:
+                - Effect: Allow
+                  Action:
+                    - 'account:Get*'
+                    - 'appstream:Describe*'
+                    - 'appstream:List*'
+                    - 'backup:List*'
+                    - 'cloudtrail:GetInsightSelectors'
+                    - 'codeartifact:List*'
+                    - 'codebuild:BatchGet*'
+                    - 'cognito-idp:GetUserPoolMfaConfig'
+                    - 'dlm:Get*'
+                    - 'drs:Describe*'
+                    - 'ds:Get*'
+                    - 'ds:Describe*'
+                    - 'ds:List*'
+                    - 'dynamodb:GetResourcePolicy'
+                    - 'ec2:GetEbsEncryptionByDefault'
+                    - 'ec2:GetSnapshotBlockPublicAccessState'
+                    - 'ec2:GetInstanceMetadataDefaults'
+                    - 'ecr:Describe*'
+                    - 'ecr:GetRegistryScanningConfiguration'
+                    - 'elasticfilesystem:DescribeBackupPolicy'
+                    - 'glue:GetConnections'
+                    - 'glue:GetSecurityConfiguration*'
+                    - 'glue:SearchTables'
+                    - 'lambda:GetFunction*'
+                    - 'logs:FilterLogEvents'
+                    - 'lightsail:GetRelationalDatabases'
+                    - 'macie2:GetMacieSession'
+                    - 's3:GetAccountPublicAccessBlock'
+                    - 'shield:DescribeProtection'
+                    - 'shield:GetSubscriptionState'
+                    - 'securityhub:BatchImportFindings'
+                    - 'securityhub:GetFindings'
+                    - 'ssm:GetDocument'
+                    - 'ssm-incidents:List*'
+                    - 'support:Describe*'
+                    - 'tag:GetTagKeys'
+                    - 'wellarchitected:List*'
+                  Resource: '*'
+            - PolicyName: ProwlerScanRoleAdditionalViewPrivilegesApiGateway
+              PolicyDocument:
+                Version : '2012-10-17'
+                Statement:
+                - Effect: Allow
+                  Action:
+                    - 'apigateway:GET'
+                  Resource: 'arn:aws:apigateway:*::/restapis/*'
+          - Ref: AWS::NoValue
+
+
+Outputs:
+
+  CrossAccountRoleArn:
+    Description: Amazon Resource Name (ARN) of the IAM role
+    Value:
+      Fn::GetAtt: CrossAccountRole.Arn
