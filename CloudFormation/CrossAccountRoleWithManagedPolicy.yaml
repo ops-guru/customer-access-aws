@@ -8,12 +8,12 @@ Parameters:
   RoleName:
     Type: String
     Description: >
-      Name of the IAM role to create in your AWS account
+      Name of the IAM role to create in your AWS account.
 
   Principal:
     Type: String
     Description: >
-      Amazon Resource Name (ARN) of the principal that can assume the IAM role created in your AWS account
+      Amazon Resource Name (ARN) of the principal that can assume the IAM role created in your AWS account.
 
   ManagedPolicyArn:
     Type: String
