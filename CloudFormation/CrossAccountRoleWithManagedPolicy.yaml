@@ -17,13 +17,13 @@ Parameters:
 
   ManagedPolicyArn:
     Type: String
-    Default: arn:aws:iam::aws:policy/ReadOnlyAccess
+    Default: ""
     AllowedValues:
+      - ""
       - arn:aws:iam::aws:policy/AdministratorAccess
       - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
       - arn:aws:iam::aws:policy/ReadOnlyAccess
-      - Security-Audit-with-Prowler
     Description: >
       AWS managed policy to attach to the role (Default: ReadOnlyAccess).
 
