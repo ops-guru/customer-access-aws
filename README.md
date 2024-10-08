@@ -2,29 +2,32 @@
 
 This repository contains a CloudFormation template designed to grant access to OpsGuru employees in your AWS account. The template offers varying levels of access, allowing you to tailor permissions to your specific needs via the parameter values you provide.
 
-The `CrossAccountRoleWithManagedPolicy.yaml` template leverages a specified [AWS managed policy for job function](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html) to provide permissions in your AWS account. You may chose from one of the following AWS managed policies:
+The `CrossAccountRole.yaml` template leverages either a specified [AWS managed policy for job function](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html) or a OpsGuru-provided custom role (e.g., `ProwlerScanRole`) to provide permissions in your AWS account. You may chose from one of the following AWS managed policies or OpsGuru-provided custom role:
 
-- `AdministratorAccess`: Provides comprehensive administrative privileges across all resources in your AWS account
-- `AmazonEC2ReadOnlyAccess`: Provides read only access to Amazon EC2
-- `AWSBillingReadOnlyAccess`: Provides read-only access exclusively to billing information within your AWS account
-- `ReadOnlyAccess`: Provides read-only access to all resources in your AWS account
-- `Security-Audit-with-Prowler`: Provides two AWS managed policies, `SecurityAudit` and `job-function/ViewOnlyAccess`, to enable Prowler to run security audits on your AWS account.
+- AWS Managed Policies:
+    - `AdministratorAccess`: Provides comprehensive administrative privileges across all resources in your AWS account
+    - `AmazonEC2ReadOnlyAccess`: Provides read only access to Amazon EC2
+    - `AWSBillingReadOnlyAccess`: Provides read-only access exclusively to billing information within your AWS account
+    - `ReadOnlyAccess`: Provides read-only access to all resources in your AWS account
+- OpsGuru-provided Custom Role:
+    - `ProwlerScanRole`: Attaches two AWS managed policies (`SecurityAudit` and `job-function/ViewOnlyAccess`) and two Prowler-recommended inline policies to enable Prowler to run security audits on your AWS account.
 
 For more granular control over resources and permissions, explore the example files within the `inline-policy-examples` folder. These templates demonstrate the use of inline policies, allowing you to finely tune access according to your requirements.
 
-Feel free to review and choose the AWS managed policy that best aligns with your security and access management strategy. If additional customization is needed, refer to the inline policy examples for inspiration on crafting policies tailored to your specific use case.
+Feel free to review and choose the permissions that best aligns with your security and access management strategy. If additional customization is needed, refer to the inline policy examples for inspiration on crafting policies tailored to your specific use case.
 
-If you're unsure about which policy aligns with your project requirements, we recommend using the `CrossAccountRoleWithManagedPolicy.yaml` template with the `ReadOnlyAccess` managed policy. This template grants read-only access to all your services and resources, catering to the needs of OpsGuru team members.
+If you're unsure about which policy aligns with your project requirements, we recommend using the `CrossAccountRole.yaml` template with the `ReadOnlyAccess` managed policy. This template grants read-only access to all your services and resources, catering to the needs of OpsGuru team members.
 
 ## Required Information for CloudFormation Template Customization
 
-To effectively use the provided `CrossAccountRoleWithManagedPolicy.yaml` CloudFormation template, specify the following parameters with accurate information for seamless integration with your AWS account:
+To effectively use the provided `CrossAccountRole.yaml` CloudFormation template, specify the following parameters with accurate information for seamless integration with your AWS account:
 
 Parameter  | Description
 ---------  | -----------
 RoleName   | Name of the IAM role to create in your AWS account
 Principal  | Amazon Resource Name (ARN) of the principal that can assume the IAM role
-ManagedPolicyArn | AWS managed policy to attach to the IAM role
+ManagedPolicyArn | If selected, a role will be created with the specified AWS managed policy attached
+PredefinedRole | If selected, the specified predefined role will be created
 
 Kindly request the OpsGuru team to furnish you with the specific values for the parameters mentioned above.
 
@@ -40,7 +43,7 @@ To employ the provided templates, follow these steps:
 2. Click on the `Create stack` > `With new resources (standard)` button.
 3. In the subsequent steps, under `Specify template`, opt for the `Upload a template file` radio button, click `Choose file` and select the corresponding template file from this repository. The template will be automatically uploaded to an AWS-managed S3 bucket in your account for CloudFormation templates.
 4. Click `Next` and provide a name for your stack (e.g., `OpsGuru-readonly-billing`).
-5. Specify the `ManagedPolicyArn`, `Principal` and `RoleName` parameters as provided by OpsGuru.
+5. Specify the `Principal` and `RoleName` parameters as provided by OpsGuru, as well as the `ManagedPolicyArn` or `PredefinedRole` parameter.
 6. Click `Next`, optionally add tags to the stack, and click `Next` again.
 7. In the last step, acknowledge that `AWS CloudFormation might create IAM resources with custom names` by checking the corresponding box.
 8. Click `Submit`. The stack will be generated and commence execution. Upon successful completion, you should see the status `CREATE_COMPLETE` for this stack.
