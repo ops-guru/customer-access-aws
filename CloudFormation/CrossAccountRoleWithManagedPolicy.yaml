@@ -37,22 +37,22 @@ Parameters:
       If selected, the specified predefined role will be created.
 
 
-Metadata: 
+Metadata:
 
-  AWS::CloudFormation::Interface: 
-    ParameterGroups: 
-      - Label: 
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
           default: Role Permissions (Choose One)
-        Parameters: 
+        Parameters:
           - ManagedPolicyArn
           - PredefinedRole
-      - Label: 
+      - Label:
           default: OpsGuru Provided Parameter Values
-        Parameters: 
+        Parameters:
           - Principal
           - RoleName
-    ParameterLabels: 
-      ManagedPolicyArn: 
+    ParameterLabels:
+      ManagedPolicyArn:
         default: Managed Policy ARN (Optional)
       PredefinedRole:
         default: Predefined Role (Optional)
@@ -61,7 +61,8 @@ Metadata:
 
 
 Conditions:
-  ProwlerScanRole: 
+
+  ProwlerScanRole:
     Fn::Equals:
       - Ref: PredefinedRole
       - ProwlerScanRole
@@ -85,10 +86,10 @@ Resources:
       ManagedPolicyArns:
         Fn::If:
           - ProwlerScanRole
-          - 
+          -
             - arn:aws:iam::aws:policy/SecurityAudit
             - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
-          - 
+          -
             - Ref: ManagedPolicyArn
       Policies:
         Fn::If:
@@ -147,7 +148,7 @@ Resources:
                     - 'apigateway:GET'
                   Resource: 'arn:aws:apigateway:*::/restapis/*'
           - Ref: AWS::NoValue
-            
+
 
 Outputs:
 
